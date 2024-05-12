@@ -8,6 +8,7 @@ import com.yash.notebuddy.feature_note.data.repository.NoteRepositoryImpl
 import com.yash.notebuddy.feature_note.domain.repository.NoteRepository
 import com.yash.notebuddy.feature_note.domain.use_case.AddNote
 import com.yash.notebuddy.feature_note.domain.use_case.DeleteNoteUseCase
+import com.yash.notebuddy.feature_note.domain.use_case.GetNoteUseCase
 import com.yash.notebuddy.feature_note.domain.use_case.GetNotesUseCase
 import com.yash.notebuddy.feature_note.domain.use_case.NoteUseCases
 import dagger.Module
@@ -42,7 +43,8 @@ object AppModule {
         return NoteUseCases(
             getNotesUseCase = GetNotesUseCase(repository = noteRepository),
             deleteNoteUseCase = DeleteNoteUseCase(repository = noteRepository),
-            addNote = AddNote(noteRepository)
+            addNote = AddNote(noteRepository),
+            getNoteUseCase = GetNoteUseCase(noteRepository)
         )
     }
 }
