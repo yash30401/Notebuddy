@@ -1,12 +1,13 @@
 package com.yash.notebuddy.feature_note.presentation.notes.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -80,7 +81,6 @@ fun NoteItem(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(end = 32.dp)
         ) {
             Text(
                 text = note.title,
@@ -94,16 +94,24 @@ fun NoteItem(
                 text = note.content,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 10,
+                maxLines = 6,
                 overflow = TextOverflow.Ellipsis
             )
 
-            IconButton(onClick = { onDelete },
-                modifier = ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete Note"
-                )
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.End
+            ) {
+                IconButton(
+                    onClick = { onDelete },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete Note",
+                        Modifier.size(16.dp)
+                    )
+                }
             }
         }
     }
@@ -114,7 +122,7 @@ fun NoteItem(
 private fun NoteItemPreview() {
     NoteItem(note = Note(
         "Note",
-        "Content Is content",
+        "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.",
         14324234L,
         Note.noteColors.get(1).toArgb(),
         1
