@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -39,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yash.notebuddy.feature_note.domain.model.Note
 import com.yash.notebuddy.feature_note.presentation.add_edit_note.components.TransparentHintTextField
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -62,6 +64,24 @@ fun AddEditNoteScreen(
         )
     }
     val scope = rememberCoroutineScope()
+
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event->
+            when(event){
+                AddEditNoteViewModel.UiEvent.SaveNote -> {
+                    navController.navigateUp()
+                }
+                is AddEditNoteViewModel.UiEvent.showSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message
+                    )
+                }
+            }
+        }
+    }
+
+
     Scaffold(floatingActionButton = {
         FloatingActionButton(
             onClick = {
