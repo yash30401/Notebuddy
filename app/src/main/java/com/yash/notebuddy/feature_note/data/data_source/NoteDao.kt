@@ -18,8 +18,8 @@ interface NoteDao {
      fun getNoteById(id:Int):Note?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     fun insertNote(note:Note)
+      fun insertNote(note:Note)
 
     @Delete
-     fun deleteNote(note:Note)
+      fun deleteNote(note:Note)
 }

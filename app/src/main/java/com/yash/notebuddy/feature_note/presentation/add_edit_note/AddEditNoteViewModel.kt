@@ -11,6 +11,7 @@ import com.yash.notebuddy.feature_note.domain.model.Note
 import com.yash.notebuddy.feature_note.domain.use_case.GetNoteUseCase
 import com.yash.notebuddy.feature_note.domain.use_case.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -89,7 +90,7 @@ class AddEditNoteViewModel @Inject constructor(
                 _noteColor.value = event.color
             }
             is AddEditNoteEvent.SaveNote -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     try {
                         noteUseCases.addNote(
                             Note(
