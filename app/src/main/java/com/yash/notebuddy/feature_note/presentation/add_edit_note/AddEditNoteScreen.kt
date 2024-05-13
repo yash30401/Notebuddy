@@ -49,10 +49,8 @@ import kotlinx.coroutines.launch
 fun AddEditNoteScreen(
     navController: NavController,
     noteColor: Int,
-    viewModel: AddEditNoteViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
-
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
 
@@ -65,33 +63,32 @@ fun AddEditNoteScreen(
     }
     val scope = rememberCoroutineScope()
 
-
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event->
-            when(event){
-                AddEditNoteViewModel.UiEvent.SaveNote -> {
-                    navController.navigateUp()
-                }
-                is AddEditNoteViewModel.UiEvent.showSnackbar -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message
                     )
+                }
+                is AddEditNoteViewModel.UiEvent.SaveNote -> {
+                    navController.navigateUp()
                 }
             }
         }
     }
 
 
-    Scaffold(floatingActionButton = {
-        FloatingActionButton(
-            onClick = {
-                viewModel.onEvent(AddEditNoteEvent.SaveNote)
-            },
-            Modifier.background(MaterialTheme.colorScheme.primary)
-        ) {
-            Icon(imageVector = Icons.Default.Save, contentDescription = "Save Note")
-        }
-    }
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                },
+            ) {
+                Icon(imageVector = Icons.Default.Save, contentDescription = "Save note")
+            }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -114,46 +111,52 @@ fun AddEditNoteScreen(
                             .clip(CircleShape)
                             .background(color)
                             .border(
-                                3.dp, color = if (viewModel.noteColor.value == colorInt) {
+                                width = 3.dp,
+                                color = if (viewModel.noteColor.value == colorInt) {
                                     Color.Black
-                                } else {
-                                    Color.Transparent
-                                },
+                                } else Color.Transparent,
                                 shape = CircleShape
                             )
                             .clickable {
                                 scope.launch {
                                     noteBackgroundAnimatable.animateTo(
                                         targetValue = Color(colorInt),
-                                        animationSpec = tween(durationMillis = 500)
+                                        animationSpec = tween(
+                                            durationMillis = 500
+                                        )
                                     )
                                 }
                                 viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
                             }
-
                     )
-
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(
                 text = titleState.text,
                 hint = titleState.hint,
-                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it)) },
-                onFocusChange ={viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))},
-                isHintVisible = true,
+                onValueChange = {
+                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
+                },
+                onFocusChange = {
+                    viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
+                },
+                isHintVisible = titleState.isHintVisible,
                 singleLine = true,
                 textStyle = MaterialTheme.typography.headlineSmall
             )
-
             Spacer(modifier = Modifier.height(16.dp))
             TransparentHintTextField(
                 text = contentState.text,
                 hint = contentState.hint,
-                onValueChange = { viewModel.onEvent(AddEditNoteEvent.EnteredContent(it)) },
-                onFocusChange ={viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))},
-                isHintVisible = true,
-                textStyle = MaterialTheme.typography.labelSmall,
+                onValueChange = {
+                    viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
+                },
+                onFocusChange = {
+                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
+                },
+                isHintVisible = contentState.isHintVisible,
+                textStyle = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.fillMaxHeight()
             )
         }

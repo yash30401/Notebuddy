@@ -16,31 +16,29 @@ import androidx.compose.ui.tooling.preview.Preview
 fun TransparentHintTextField(
     text: String,
     hint: String,
+    modifier: Modifier = Modifier,
     isHintVisible: Boolean = true,
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
     singleLine: Boolean = false,
-    onFocusChange: (FocusState) -> Unit,
-    modifier: Modifier = Modifier
+    onFocusChange: (FocusState) -> Unit
 ) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier
+    ) {
         BasicTextField(
-            value = text, onValueChange = { onValueChange },
-            singleLine = singleLine, textStyle = textStyle,
+            value = text,
+            onValueChange = onValueChange,
+            singleLine = singleLine,
+            textStyle = textStyle,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged {
                     onFocusChange(it)
                 }
         )
-        if(isHintVisible){
+        if(isHintVisible) {
             Text(text = hint, style = textStyle, color = Color.DarkGray)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TransparentHintTextFieldPreview() {
-    TransparentHintTextField("", "Type Title", onValueChange = {}, onFocusChange = {})
 }
